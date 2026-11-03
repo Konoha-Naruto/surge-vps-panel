@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 22px;
+    background: #000;
+    font-family: -apple-system, "SF Pro Text", "PingFang SC", sans-serif;
+    color: #fff;
+    width: 390px;
+  }
+  .label { color: #8e8e93; font-size: 12px; letter-spacing: .04em; margin: 0 0 8px 4px; }
+  .card {
+    background: #1c1c1e; border-radius: 14px; padding: 14px 14px 15px;
+    margin-bottom: 16px; box-shadow: 0 1px 0 rgba(255,255,255,.04) inset;
+  }
+  .head { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff; flex: 0 0 auto;
+  }
+  .dot.info { background: #0a84ff; }
+  .dot.alert { background: #ff9f0a; }
+  .dot.error { background: #ff453a; }
+  .title { font-size: 15px; font-weight: 600; }
+  pre {
+    margin: 0; font-family: "SF Mono", ui-monospace, Menlo, monospace;
+    font-size: 12px; line-height: 1.55; color: #ebebf5; letter-spacing: .01em;
+    white-space: pre;
+  }
+  .dim { color: #8e8e93; font-size: 11px; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <p class="label">策略选择页 · 信息面板</p>
+
+  <div class="card">
+    <div class="head"><span class="dot info">i</span><span class="title">香港节点</span></div>
+    <pre>CPU ████░░░░░░  42%  4核
+RAM ██████░░░░  61%  4.9G/8G
+DSK ██░░░░░░░░  23%  21G/93G
+NET █░░░░░░░░░   6%  130G/2000G
+UP 43天2时 · 12:42</pre>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="dot alert">!</span><span class="title">新加坡小鸡</span></div>
+    <pre>CPU ████████░░  84%  2核
+RAM █████████░  92%  3.6G/4G
+DSK █████████░  91%  44G/48G
+NET █████████░  93%  1860G/2000G
+UP 12天7时 · 12:45</pre>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="dot error">×</span><span class="title">德国备份机</span></div>
+    <pre>⚠️ 连接失败
+Read stream EOF
+检查 host / token / 防火墙</pre>
+  </div>
+
+  <div class="dim">样式随占用率自动切换：正常 blue · ≥78% 橙色 · ≥90% 红色</div>
+</body>
+</html>
