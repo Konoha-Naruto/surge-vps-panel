@@ -1,0 +1,10 @@
+#!name=VPS 服务器监控
+#!desc=在 Surge 面板显示 VPS 的 CPU / 内存 / 磁盘 / 月流量 / 运行时长。需要先在 VPS 上跑 vps_agent.py（见仓库 README）
+#!arguments=host,port:8787,token:changeme,name:,scheme:http,limit:2000,interval:300,mask:true,reset:1
+#!arguments-desc=host=服务器 IP/域名；port=采集端口(默认8787)；token=agent 口令；name=面板标题(留空用主机名)；scheme=http 或 https；limit=月流量限额(G)；interval=刷新间隔(秒)；mask=是否给 IP 打码；reset=流量重置日
+
+[Script]
+vps_monitor = type=generic, script-path=https://raw.githubusercontent.com/Konoha-Naruto/surge-vps-panel/main/vps_panel.js, argument="host={{{host}}}&port={{{port}}}&token={{{token}}}&name={{{name}}}&scheme={{{scheme}}}&limit={{{limit}}}&mask={{{mask}}}&reset={{{reset}}}", timeout=15
+
+[Panel]
+VPS = script-name=vps_monitor, title="VPS 监控", content="点刷新拉取数据", style=info, update-interval={{{interval}}}
