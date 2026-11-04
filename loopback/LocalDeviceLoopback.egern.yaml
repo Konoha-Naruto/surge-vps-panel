@@ -1,0 +1,40 @@
+# Local Device Loopback / 本地设备回环（Egern 原生版）
+#
+# 对应 Surge 模块：
+#   [General]
+#   ipv6-vif = auto
+#   tun-included-routes = %INSERT% 10.7.0.1/32
+#   tun-excluded-routes = %INSERT% 203.0.113.1/32
+#   [IP Rewrite]
+#   10.7.0.1 = reflect
+#
+# Egern 的模块文件只能携带 dns / rules / rewrites / map_locals / scriptings /
+# mitm / http_captures / widgets / bypass_tunnel_proxy / real_ip_domains，
+# 没有 [General]、也没有 IP Rewrite 段。所以这里做两件事：
+#   1) 用 dns.hosts 把目标 IP 改写成 127.0.0.1 —— 这就是 reflect 的等价实现
+#      （Egern 官方文档「Hosts（主机映射）」明确支持 IP 作为 key，含 IP 反向映射）
+#   2) 用 ip_cidr 规则钉死 DIRECT，防止改写后的 127.0.0.1 被兜底代理规则送去远端
+#
+# TUN 路由（vif_included_routes / vif_excluded_routes / ipv6）模块改不到，
+# 必须写进 Profile.yaml，见 README 的「Profile 必须补的两行」。
+
+name: Local Device Loopback
+description: 把发往 10.7.0.1 的连接反射回本机，供 CoreDevice RSD、SideStore、"本机开发者工具"使用（Surge IP Rewrite reflect 的 Egern 等价实现）
+author: Minis
+homepage: https://github.com/Konoha-Naruto/surge-vps-panel/tree/main/loopback
+icon: arrow.triangle.2.circlepath
+
+dns:
+  hosts:
+    # 目标 IP 字面量 → 本机回环。端口保持不变，谁连 10.7.0.1:49152
+    # 就等于连 127.0.0.1:49152。
+    "10.7.0.1": 127.0.0.1
+
+rules:
+  # reflect 之后的连接必须直连，不能被 default / 兜底策略组接走
+  - ip_cidr:
+      match: 10.7.0.1/32
+      policy: DIRECT
+  - ip_cidr:
+      match: 127.0.0.1/32
+      policy: DIRECT

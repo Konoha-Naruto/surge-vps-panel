@@ -1,0 +1,11 @@
+# 复制进 Profile.yaml（模块改不到的部分）
+# Egern 的列表是「全量替换」，没有 Surge 的 %INSERT% 追加语义，
+# 原有条目请自行合并保留。
+
+ipv6: true
+
+vif_included_routes:
+  - 10.7.0.1/32
+
+vif_excluded_routes:
+  - 203.0.113.1/32
