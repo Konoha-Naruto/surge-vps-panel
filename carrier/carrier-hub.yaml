@@ -1,0 +1,294 @@
+name: 运营商聚合面板（联通·移动·电信·广电）
+description: 一个小组件同时看四家余额 / 流量 / 语音。数据抓取沿用各家原脚本，只把渲染合成一块面板。四家里可以任选显示哪几家、按什么顺序。
+author: iBL3ND / Hark / wuhuhuuuu / moyuzaime → 合并版
+homepage: https://github.com/Konoha-Naruto/surge-vps-panel/tree/main/carrier
+icon: https://iili.io/nEuB6Jt.png
+
+compat_arguments:
+  hubShow: '联通,移动,电信,广电'
+  hubTitle: '运营商'
+  hubShowFee: 'true'
+  hubShowFlow: 'true'
+  hubShowVoice: 'true'
+  hubSmallMetric: 'fee'
+  cuCapture: 'true'
+  cuCaptureNotice: 'true'
+  cuPlanNotice: 'true'
+  cuMiniCapture: 'true'
+  cuGeneralFlow: 'true'
+  cuDirectionalFlow: 'true'
+  CM_PHONENUMBER: ''
+  CM_CAPTURE: 'true'
+  CM_CAPTURE_NOTIFY: 'false'
+  ctPhone: ''
+  ctPassword: ''
+  ctDeviceId: ''
+  ctShowUsedFlow: 'false'
+  ctShowUsedVoice: 'false'
+  ctShowGeneralFlow: 'true'
+  ctShowDirectionalFlow: 'true'
+  cbCapture: 'true'
+  cbCaptureNotice: 'true'
+  cbPlanNotice: 'true'
+  cbKeepaliveInterval: '15'
+  cbDebug: 'false'
+
+compat_arguments_schema:
+  hubShow:
+    name: 显示哪几家
+    description: 用逗号分隔，顺序即显示顺序。可填 联通 / 移动 / 电信 / 广电 的中文或 unicom / mobile / telecom / broadnet。例：联通,移动
+    default_value: '联通,移动,电信,广电'
+  hubTitle:
+    name: 面板标题
+    description: 小组件左上角文字
+    default_value: '运营商'
+  hubShowFee:
+    name: 显示余额列
+    description: 大/中尺寸的余额列开关
+    default_value: 'true'
+    options:
+      - 'true'
+      - 'false'
+  hubShowFlow:
+    name: 显示流量列
+    default_value: 'true'
+    options:
+      - 'true'
+      - 'false'
+  hubShowVoice:
+    name: 显示语音列
+    default_value: 'true'
+    options:
+      - 'true'
+      - 'false'
+  hubSmallMetric:
+    name: 小尺寸显示什么
+    description: 2×2 小方块只放得下一列数字，选余额或流量
+    default_value: 'fee'
+    options:
+      - 'fee'
+      - 'flow'
+
+  # ---------------- 联通 ----------------
+  cuCapture:
+    name: 联通·数据抓取
+    description: 监听联通 App 请求（m.client.10010.com）
+    default_value: 'true'
+    options: ['true', 'false']
+  cuMiniCapture:
+    name: 联通·微信小程序抓取
+    description: 监听微信「中国联通」小程序首页与余量查询页
+    default_value: 'true'
+    options: ['true', 'false']
+  cuCaptureNotice:
+    name: 联通·抓取通知
+    description: 捕获到登录信息或套餐数据时发通知
+    default_value: 'true'
+    options: ['true', 'false']
+  cuPlanNotice:
+    name: 联通·套餐通知
+    description: 接口成功返回后通知话费、流量、语音余量
+    default_value: 'true'
+    options: ['true', 'false']
+  cuGeneralFlow:
+    name: 联通·计入通用流量
+    default_value: 'true'
+    options: ['true', 'false']
+  cuDirectionalFlow:
+    name: 联通·计入定向流量
+    default_value: 'true'
+    options: ['true', 'false']
+
+  # ---------------- 移动 ----------------
+  CM_PHONENUMBER:
+    name: 移动·手机号
+    description: 11 位移动手机号；不填则用已抓到的号码
+    default_value: ''
+  CM_CAPTURE:
+    name: 移动·抓取登录信息
+    description: 打开「中国移动」App 时自动更新登录参数
+    default_value: 'true'
+    options: ['true', 'false']
+  CM_CAPTURE_NOTIFY:
+    name: 移动·每次抓取都通知
+    default_value: 'false'
+    options: ['true', 'false']
+
+  # ---------------- 电信 ----------------
+  ctPhone:
+    name: 电信·手机号
+    description: 中国电信手机号（电信不走抓包，靠账号直登）
+    default_value: ''
+  ctPassword:
+    name: 电信·服务密码
+    description: 电信 App → 设置 → 账户与安全 里获取
+    default_value: ''
+  ctDeviceId:
+    name: 电信·设备 ID
+    description: 可选。到 https://telecom.nufe.ccwu.cc 短信登录授权后复制，不填用随机设备 ID
+    default_value: ''
+  ctShowUsedFlow:
+    name: 电信·显示已用流量
+    description: 关闭则显示剩余流量
+    default_value: 'false'
+    options: ['true', 'false']
+  ctShowUsedVoice:
+    name: 电信·显示已用语音
+    default_value: 'false'
+    options: ['true', 'false']
+  ctShowGeneralFlow:
+    name: 电信·计入通用流量
+    default_value: 'true'
+    options: ['true', 'false']
+  ctShowDirectionalFlow:
+    name: 电信·计入定向流量
+    default_value: 'true'
+    options: ['true', 'false']
+
+  # ---------------- 广电 ----------------
+  cbCapture:
+    name: 广电·数据抓取
+    description: 打开广电 App / 微信 / 支付宝小程序查询一次自动捕获
+    default_value: 'true'
+    options: ['true', 'false']
+  cbCaptureNotice:
+    name: 广电·抓取通知
+    default_value: 'true'
+    options: ['true', 'false']
+  cbPlanNotice:
+    name: 广电·套餐通知
+    default_value: 'true'
+    options: ['true', 'false']
+  cbKeepaliveInterval:
+    name: 广电·保活间隔（分钟）
+    description: 最小 15，最大 1440
+    default_value: '15'
+  cbDebug:
+    name: 广电·调试日志
+    default_value: 'false'
+    options: ['true', 'false']
+
+scriptings:
+  # ============ 聚合面板本体 ============
+  - generic:
+      name: carrier-hub
+      script_url: https://raw.githubusercontent.com/Konoha-Naruto/surge-vps-panel/main/carrier/carrier-hub.js
+      update_interval: 1800
+      timeout: 45
+      env:
+        hubShow: '{{{hubShow}}}'
+        hubTitle: '{{{hubTitle}}}'
+        hubShowFee: '{{{hubShowFee}}}'
+        hubShowFlow: '{{{hubShowFlow}}}'
+        hubShowVoice: '{{{hubShowVoice}}}'
+        hubSmallMetric: '{{{hubSmallMetric}}}'
+        cuCapture: '{{{cuCapture}}}'
+        cuPlanNotice: '{{{cuPlanNotice}}}'
+        cuGeneralFlow: '{{{cuGeneralFlow}}}'
+        cuDirectionalFlow: '{{{cuDirectionalFlow}}}'
+        CM_PHONENUMBER: '{{{CM_PHONENUMBER}}}'
+        CM_CAPTURE: '{{{CM_CAPTURE}}}'
+        CM_CAPTURE_NOTIFY: '{{{CM_CAPTURE_NOTIFY}}}'
+        CT_PHONE: '{{{ctPhone}}}'
+        CT_PASSWORD: '{{{ctPassword}}}'
+        CT_DEVICE_ID: '{{{ctDeviceId}}}'
+        CT_SHOW_USED_FLOW: '{{{ctShowUsedFlow}}}'
+        CT_SHOW_USED_VOICE: '{{{ctShowUsedVoice}}}'
+        CT_SHOW_GENERAL_FLOW: '{{{ctShowGeneralFlow}}}'
+        CT_SHOW_DIRECTIONAL_FLOW: '{{{ctShowDirectionalFlow}}}'
+        cbCapture: '{{{cbCapture}}}'
+        cbPlanNotice: '{{{cbPlanNotice}}}'
+        cbDebug: '{{{cbDebug}}}'
+
+  # ============ 联通：抓包（App + 微信小程序） ============
+  - http_request:
+      name: 联通·App 请求侦察
+      match: '^https://m\.client\.10010\.com/'
+      script_url: https://raw.githubusercontent.com/moyuzaime/egern/main/ChinaUnicom/ChinaUnicom_Widget.js
+      body_required: false
+      max_size: 1048576
+      timeout: 10
+      env:
+        cuCapture: '{{{cuCapture}}}'
+        cuCaptureNotice: '{{{cuCaptureNotice}}}'
+        cuPlanNotice: '{{{cuPlanNotice}}}'
+  - http_response:
+      name: 联通·小程序响应解析
+      match: '^https://(mina\.10010\.com/wxapplet/weixinNew/|mxx\.client\.10010\.com/(?:servicequerybusiness|servicebusiness)/)'
+      script_url: https://raw.githubusercontent.com/moyuzaime/egern/main/ChinaUnicom/ChinaUnicom_Widget.js
+      body_required: true
+      max_size: 1048576
+      timeout: 10
+      env:
+        cuMiniCapture: '{{{cuMiniCapture}}}'
+        cuCaptureNotice: '{{{cuCaptureNotice}}}'
+
+  # ============ 广电：抓包 + 保活 ============
+  - http_request:
+      name: 广电·App/微信/支付宝小程序捕获
+      match: '^https://(?:app|wx|zfb)\.10099\.com\.cn/contact-web/api/busi/qryUserInfo'
+      script_url: https://raw.githubusercontent.com/moyuzaime/egern/main/ChinaBroadnet/ChinaBroadnet_Widget.js
+      body_required: true
+      max_size: 1048576
+      timeout: 10
+      env:
+        cbCapture: '{{{cbCapture}}}'
+        cbCaptureNotice: '{{{cbCaptureNotice}}}'
+        cbPlanNotice: '{{{cbPlanNotice}}}'
+        cbDebug: '{{{cbDebug}}}'
+  - schedule:
+      name: 广电·保活
+      cron: '* * * * *'
+      script_url: https://raw.githubusercontent.com/moyuzaime/egern/main/ChinaBroadnet/ChinaBroadnet_Widget.js
+      update_interval: 21600
+      timeout: 15
+      env:
+        CB_KEEPALIVE: 'true'
+        cbKeepaliveInterval: '{{{cbKeepaliveInterval}}}'
+        cbDebug: '{{{cbDebug}}}'
+
+  # ============ 移动：登录参数 / Cookie 捕获 + 会话保活 ============
+  - http_request:
+      name: 移动·登录捕获
+      match: '^https?:\/\/(client\.app\.coc\.10086\.cn|10086\.online-cmcc\.cn)(:\d+)?\/'
+      script_url: https://raw.githubusercontent.com/zhaohantao1360-hash/Hark/main/china-mobile-hark-dash.js
+      update_interval: 3600
+      body_required: true
+      timeout: 10
+      env:
+        CM_CAPTURE: '{{{CM_CAPTURE}}}'
+        CM_CAPTURE_NOTIFY: '{{{CM_CAPTURE_NOTIFY}}}'
+  - http_response:
+      name: 移动·Cookie 捕获
+      match: '^https?:\/\/(client\.app\.coc\.10086\.cn|10086\.online-cmcc\.cn)(:\d+)?\/'
+      script_url: https://raw.githubusercontent.com/zhaohantao1360-hash/Hark/main/china-mobile-hark-dash.js
+      update_interval: 3600
+      timeout: 10
+      env:
+        CM_CAPTURE: '{{{CM_CAPTURE}}}'
+        CM_CAPTURE_NOTIFY: '{{{CM_CAPTURE_NOTIFY}}}'
+  - schedule:
+      name: 移动·会话保活
+      cron: '*/20 * * * *'
+      script_url: https://raw.githubusercontent.com/zhaohantao1360-hash/Hark/main/china-mobile-hark-dash.js
+      update_interval: 3600
+      timeout: 30
+      env:
+        CM_KEEPALIVE: 'true'
+        CM_PHONENUMBER: '{{{CM_PHONENUMBER}}}'
+
+mitm:
+  hostnames:
+    includes:
+      - m.client.10010.com
+      - mina.10010.com
+      - mxx.client.10010.com
+      - app.10099.com.cn
+      - wx.10099.com.cn
+      - zfb.10099.com.cn
+      - client.app.coc.10086.cn
+      - 10086.online-cmcc.cn
+
+widgets:
+  - name: carrier-hub
+    script_name: carrier-hub
