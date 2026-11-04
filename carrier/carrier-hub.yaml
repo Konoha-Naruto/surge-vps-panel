@@ -173,7 +173,7 @@ scriptings:
   - generic:
       name: carrier-hub
       script_url: https://raw.githubusercontent.com/Konoha-Naruto/surge-vps-panel/main/carrier/carrier-hub.js
-      update_interval: 1800
+      update_interval: 900
       timeout: 45
       env:
         hubShow: '{{{hubShow}}}'

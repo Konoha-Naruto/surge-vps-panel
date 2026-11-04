@@ -6715,7 +6715,8 @@ async function runOne(carrier, ctx) {
   const sub = {
     storage: ctx.storage,
     env: ctx.env || {},
-    notify: ctx.notify,
+    /* 包一层，保证 notify 里的 this 仍指向宿主 ctx */
+    notify: function (o) { return typeof ctx.notify === 'function' ? ctx.notify(o) : undefined; },
     http: ctx.http,
     widgetFamily: 'systemSmall',
   };
@@ -6872,15 +6873,15 @@ function buildPanel(title, rows, family, opts) {
           {
             type: 'stack', direction: 'column', alignItems: 'start', gap: 0, flex: 1,
             children: [
-              T(fees.length + ' 家在网 · 合计余额（元）', 9, 'medium', COLOR.faint),
-              T(sum.toFixed(2), 24, 'bold', COLOR.txt),
+              T(fees.length ? fees.length + ' 家在网 · 合计余额（元）' : '还没取到数据', 9, 'medium', COLOR.faint),
+              T(fees.length ? sum.toFixed(2) : '--', 24, 'bold', COLOR.txt),
             ],
           },
           {
             type: 'stack', direction: 'column', alignItems: 'end', gap: 0,
             children: [
               T(okCount + '/' + shown.length, 16, 'bold', okCount === shown.length ? COLOR.ok : COLOR.warn),
-              T('状态正常', 9, 'medium', COLOR.faint),
+              T(okCount === shown.length ? '状态正常' : (okCount === 0 ? '待配置' : '部分异常'), 9, 'medium', COLOR.faint),
             ],
           },
         ],
@@ -6891,7 +6892,7 @@ function buildPanel(title, rows, family, opts) {
         children: [
           T('合计 ¥' + sum.toFixed(2), 9, 'medium', COLOR.sub),
           { type: 'spacer' },
-          T(okCount + '/' + shown.length + ' 正常', 9, 'medium', okCount === shown.length ? COLOR.ok : COLOR.warn),
+          T(okCount + '/' + shown.length, 9, 'semibold', okCount === shown.length ? COLOR.ok : COLOR.warn),
         ],
       });
     }
@@ -6902,7 +6903,7 @@ function buildPanel(title, rows, family, opts) {
     padding: wide ? [16, 16] : [12, 12],
     gap: wide ? 6 : 2,
     backgroundColor: COLOR.bg,
-    refreshAfter: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+    refreshAfter: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
     children: children,
   };
 }
