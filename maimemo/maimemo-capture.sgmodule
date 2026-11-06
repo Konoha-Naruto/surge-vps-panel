@@ -1,0 +1,10 @@
+#!name=墨墨签到抓包
+#!desc=只记录墨墨 App 的请求（不改包、不阻断），用来提取每日签到的真实接口。抓完一次即可关闭本模块。
+#!system=ios
+#!author=Minis
+
+[Script]
+mm-capture = type=http-request, pattern=^https?://([a-zA-Z0-9-]+\.)*maimemo\.com/, requires-body=1, max-size=1048576, timeout=10, script-path=https://raw.githubusercontent.com/Konoha-Naruto/surge-vps-panel/main/maimemo/capture.js
+
+[MITM]
+hostname = %APPEND% *.maimemo.com, maimemo.com
